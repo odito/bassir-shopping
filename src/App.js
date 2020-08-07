@@ -17,19 +17,25 @@ class  App extends React.Component {
 
     this.state={
       products:data.products,
-      cartItems:[],
+      cartItems:localStorage.getItem("cartItems")?JSON.parse(localStorage.getItem("cartItems")):[],
       size:'',
       sort:''
     }
   }
 
-
+createOrder=(order)=>{
+ alert(`need to save order for ${order.name}`)
+}
 
 removeFromCart=(product)=>{
   const cartItems = this.state.cartItems.slice();
   this.setState({
     cartItems:cartItems.filter((x)=>x._id !== product._id),
+  },()=>{
+    localStorage.setItem('cartItems', JSON.stringify(this.state.cartItems));
   })
+
+ 
 }
 
 addToCart=(product)=>{
@@ -46,9 +52,17 @@ if(!alreadyInCart){
    cartItems.push({...product, count:1})
 }
 
+
+
 this.setState({
   cartItems:cartItems
+},()=>{
+  localStorage.setItem('cartItems', JSON.stringify(this.state.cartItems));
 })
+
+
+
+
 }
 
 
@@ -150,7 +164,7 @@ this.setState({
            </div>
 
            <div className="sidebar">
-            <Cart cartItems={this.state.cartItems} removeFromCart={this.removeFromCart}  />
+            <Cart cartItems={this.state.cartItems} removeFromCart={this.removeFromCart} createOrder={this.createOrder}  />
            </div>
          </div>
         </main>
@@ -167,6 +181,6 @@ this.setState({
 export default App;
 
 
-// next 7
+// next 8
 
 // https://docs.google.com/spreadsheets/d/1c5S0dTQHLjQPC0TZT7ZVR6l0JwV52DpjXmP-q4KNCS8/edit#gid=0
